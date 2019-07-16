@@ -1,12 +1,12 @@
 <?php
 
-/* @var $factory \Illuminate\Database\Eloquent\Factory */
-
-use App\Model;
+use App\Configuration;
 use Faker\Generator as Faker;
 
-$factory->define(Model::class, function (Faker $faker) {
+$factory->define(Configuration::class, function (Faker $faker) {
     return [
-        //
+        'categorie' => $faker->word,
+        'champ' => $faker->word,
+        'libelle' => $faker->word,
     ];
 });
