@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Categorie;
 use App\Http\Requests\StoreTypeRequest;
 use App\Http\Resources\Type as TypeResource;
 use App\Type;
@@ -32,7 +33,7 @@ class TypeController extends Controller
     public function store(StoreTypeRequest $request)
     {
         $model = $request->isMethod('put') ? Type::findOrFail($request->id) : new Type;
-        $model->categorie()->associate($request->get('categorie'));
+        $model->categorie()->associate(Categorie::find($request->get('categorie')));
         $model->nom()->associate($request->get('nom'));
 
         if ($model->save()) {

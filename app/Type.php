@@ -12,7 +12,7 @@ class Type extends Model
 
     public function categorie()
     {
-        return $this->belongsTo(Categorie::class);
+        return $this->belongsTo(Categorie::class)->join('configurations', 'configurations.id', '=','nom_id');
     }
 
     public function nom()

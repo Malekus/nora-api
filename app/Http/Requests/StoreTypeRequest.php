@@ -6,12 +6,29 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Factory;
 use Illuminate\Validation\ValidationException;
 
 class StoreTypeRequest extends FormRequest
 {
 
-        public function wantsJson()
+    public function __construct(Factory $validationFactory)
+    {
+        $validationFactory->extend(
+            'uniqueType',
+            function () {
+                $counter = DB::table('types')
+                    ->where(['categorie_id' => $this->request->get('categorie'),
+                        'nom_id' => $this->request->get('nom')])
+                    ->count();
+                return 0 === $counter;
+            },
+            'Ce type existe déjà.'
+        );
+    }
+
+    public function wantsJson()
     {
         return true;
     }
@@ -23,8 +40,8 @@ class StoreTypeRequest extends FormRequest
     public function rules()
     {
         return [
-            'categorie' => 'required',
-            'champ' => 'required',
+            'categorie' => 'required|uniqueType',
+            'nom' => 'required',
         ];
     }
 
