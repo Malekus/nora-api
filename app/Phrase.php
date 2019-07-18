@@ -12,6 +12,6 @@ class Phrase extends Model
 
     public function type()
     {
-        return $this->belongsTo(Type::class)->join('configurations', 'configurations.id', '=','nom_id');;
+        return $this->belongsTo(Type::class);
     }
 }

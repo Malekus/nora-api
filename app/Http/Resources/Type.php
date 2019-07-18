@@ -10,8 +10,8 @@ class Type extends JsonResource
     {
         return [
             'id' => $this->id,
-            'categorie' => $this->categorie,
-            'nom' => $this->nom
+            'categorie' => new Categorie($this->categorie),
+            'nom' => new Configuration($this->nom)
         ];
     }
 }

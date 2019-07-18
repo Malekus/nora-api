@@ -10,6 +10,8 @@ class Categorie extends Model
 
     protected $fillable = ['*'];
 
+    protected $guarded = ['created_at', 'updated_at'];
+
     public function nom()
     {
         return $this->belongsTo(Configuration::class);

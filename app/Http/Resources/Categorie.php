@@ -10,7 +10,8 @@ class Categorie extends JsonResource
     {
         return [
             'id' => $this->id,
-            'nom' => $this->nom
+            'nom' => new Configuration($this->nom)
         ];
     }
 }
+

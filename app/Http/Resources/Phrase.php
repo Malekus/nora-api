@@ -10,7 +10,7 @@ class Phrase extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => $this->type,
+            'type' => new Type($this->type),
             'texte' => $this->texte
         ];
     }
