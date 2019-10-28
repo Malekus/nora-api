@@ -10,7 +10,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ConfigurationsTableSeeder::class,
             CategoriesTableSeeder::class,
-            TypesTableSeeder::class,
             PhrasesTableSeeder::class,
         ]);
     }

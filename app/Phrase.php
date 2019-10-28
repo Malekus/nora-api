@@ -10,8 +10,8 @@ class Phrase extends Model
 
     protected $fillable = ['*'];
 
-    public function type()
+    public function categorie()
     {
-        return $this->belongsTo(Type::class);
+        return $this->belongsTo(Categorie::class);
     }
 }

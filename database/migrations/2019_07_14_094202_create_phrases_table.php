@@ -11,11 +11,11 @@ class CreatePhrasesTable extends Migration
     {
         Schema::create('phrases', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('type_id')->unsigned()->index();
-            $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');
+            $table->integer('categorie_id')->unsigned()->index();
+            $table->foreign('categorie_id')->references('id')->on('categories')->onDelete('cascade');
             $table->string('texte');
             $table->timestamps();
-            $table->unique(['type_id', 'texte']);
+            $table->unique(['categorie_id', 'texte']);
         });
     }
 
