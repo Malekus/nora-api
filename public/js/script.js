@@ -11,7 +11,7 @@ $(document).ready(function(){
     })
 
 
-    $('#addPhrase').click(function(){
+    $('#parts').on('click', '.addPhrase', function(e){
         var phrase = '<div class="phrase rounded-lg"><p>'+$(this).parent().parent().find('p').text()+'</p><div class="groupeBtn"><button class="btn btn-primary btnEditPhrase"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger btnRemovePhrase"><span class="icon"><i class="fa fa-times"></i></span></button></div></div></div>'
         $("#displayWorking").append(phrase)
     })
@@ -35,7 +35,6 @@ $(document).ready(function(){
     })
 
     /*end Nav Working*/
-
 
     /*Nav Working Phrase*/
     $('#displayWorking').on('click', '.btnEditPhrase', function(e){

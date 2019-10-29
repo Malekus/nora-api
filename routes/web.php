@@ -15,6 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 Route::get('/', 'HomeController@index')
     ->name('home.index');
+
+Route::get('/phrase/{id}', 'HomeController@getPhrase')
+    ->name('home.getPhrase');

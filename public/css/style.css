@@ -222,7 +222,7 @@ main {
 }
 
 .phrase p {
-    text-align: justify;
+    width: 100%;
 }
 .phrase button {
     width: 45px;
@@ -245,4 +245,12 @@ main {
     background-image: none  !important;
     -webkit-box-shadow: none !important;
     box-shadow: none  !important;
+}
+
+.loader{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

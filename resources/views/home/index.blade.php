@@ -5,26 +5,21 @@
     <div id="parts">
         <div class="leftPart">
             <div>
-                <select class="form-control" id="idSelect">
+                <select class="form-control" id="idSelectCategorie">
                     @foreach($categories as $categorie)
-                        <option>{{ $categorie->nom->libelle  }}</option>
+                        <option value="{{ $categorie->nom->id }}">{{ $categorie->nom->libelle  }}</option>
                     @endforeach
                 </select>
             </div>
-            <div>
-                <button class="btn btn-primary">Template</button>
-            </div>
+            <!--
+                <dv>
+                    <button class="btn btn-primary">Template</button>
+                </dv>
+            -->
         </div>
         <div class="centerPart">
             <div class="elementCenter rounded-lg">
-                <div class="phrase rounded-lg">
-                    <p>Lorem ipsum dolor sit amet <span class="font-weight-bolder">ICIIIIII</span> commodi eveniet quia asperiores nostrum vel molestias, aut fugit doloremque ipsa fugiat quidem sed reiciendis corporis perferendis! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto molestias ducimus, tempora consequatur quasi facere vel nostrum dicta quam magnam earum, suscipit, porro temporibus possimus perspiciatis harum deserunt mollitia! Adipisci! Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque animi a pariatur deleniti ducimus dignissimos, magnam tempore fugiat nobis fugit ad eius quod obcaecati corporis. Vitae sed magnam vel laboriosam.</p>
-                    <div class="groupeBtn">
-                        <button class="btn btn-success" id="addPhrase">
-                            <span class="icon"><i class="fa fa-arrow-right"></i></span>
-                        </button>
-                    </div>
-                </div>
+
             </div>
         </div>
         <div class="rightPart">
@@ -32,7 +27,14 @@
                 <div class="workingPlace rounded-lg">
                     <div id="displayWorking">
 
-                        <div class="phrase rounded-lg">
+
+
+
+
+
+                        <!--
+
+                                                <div class="phrase rounded-lg">
                             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat id volminus ipsum commodi eveniet quia asperiores nostrum vel molestias, aut fugit doloremque ipsa fugiat quidem sed reiciendis corporis perferendis! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto molestias ducimus, tempora consequatur quasi facere vel nostrum dicta quam magnam earum, suscipit, porro temporibus possimus perspiciatis harum deserunt mollitia! Adipisci! Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque animi a pariatur deleniti ducimus dignissimos, magnam tempore fugiat nobis fugit ad eius quod obcaecati corporis. Vitae sed magnam vel laboriosam.</p>
                             <div class="groupeBtn">
                                 <button class="btn btn-primary btnEditPhrase">
@@ -43,6 +45,8 @@
                                 </button>
                             </div>
                         </div>
+
+                        -->
 
 
                     </div>
@@ -64,5 +68,48 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('ajax')
+        <script>
+
+            let loader = '<div class="loader"><div class="spinner-border"></div></div>'
+
+            let ajaxPhrase = function(){
+                $('.elementCenter').empty()
+                $('.elementCenter').append(loader);
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+
+                let url = '{{ url('/phrase/:id')}}';
+                url = url.replace(':id', $('#idSelectCategorie').val());
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function (data) {
+                        $('.elementCenter').empty();
+                        $('.elementCenter').append(data);
+                    },
+                    error: function (data) {
+                        console.log("fail");
+                    }
+                });
+            };
+
+            ajaxPhrase()
+
+
+            $(document).ready(function(){
+                $('#idSelectCategorie').change(function(e){
+                    e.preventDefault();
+
+                    ajaxPhrase();
+                });
+            });
+        </script>
 @endsection
 
