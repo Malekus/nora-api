@@ -8,5 +8,5 @@ class Configuration extends Model
 {
     protected $table = 'configurations';
 
-    protected $fillable = ['*'];
+    protected $fillable = ['id', 'categorie', 'champ', 'libelle'];
 }

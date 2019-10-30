@@ -84,14 +84,10 @@
                     <div id="contentConfig">
                         <div id="configCategorie">
                             <h3>Catégorie</h3>
-                            <div id="showCategorie">
-
-                            </div>
-
-
+                            <div id="showCategorie" style="overflow-y: scroll; height: 450px;"></div>
                             <div id="addCategorie" class="my-3">
-                                <form class="form-inline">
-                                    <input type="text" class="form-control mr-2" placeholder="Ajouter une catégorie">
+                                <form class="form-inline" id="formAddCategorie">
+                                    <input type="text" class="form-control mr-2" id="newCategorie" placeholder="Ajouter une catégorie">
                                     <button class="btn btn-success mr-2">
                                         <span class="icon"><i class="fa fa-plus"></i></span>
                                     </button>
@@ -111,6 +107,21 @@
                                     <span class="icon"><i class="fa fa-times"></i></span>
                                 </button>
                             </form>
+
+                            <div id="addPhrase" class="my-3">
+                                <form class="form-inline" id="formAddPhrase">
+                                    <select class="form-control">
+                                        @foreach($categories as $categorie)
+                                            <option value="{{ $categorie->nom->id }}">{{ $categorie->nom->libelle  }}</option>
+                                        @endforeach
+                                    </select>
+                                    <input type="text" class="form-control mr-2" placeholder="Ajouter une phrase">
+                                    <button class="btn btn-success mr-2">
+                                        <span class="icon"><i class="fa fa-plus"></i></span>
+                                    </button>
+                                </form>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -175,9 +186,9 @@
                     method: 'GET',
                     success: function (data) {
                         $(data.data).each(function(index, element){
-                            res += '<form class="form-inline"><input type="text" class="form-control mr-2" value="'+ element.nom.libelle +'">'
-                            res += '<button class="btn btn-primary mr-2"><span class="icon"><i class="fa fa-edit"></i></span></button>'
-                            res += '<button class="btn btn-danger mr-2"><span class="icon"><i class="fa fa-times"></i></span></button></form>'
+                            res += '<div class="form-inline"><input type="text" data-id="'+ element.nom.id +'" class="form-control mr-2" value="'+ element.nom.libelle +'">'
+                            res += '<button class="btn btn-primary mr-2 btnEditCategorie"><span class="icon"><i class="fa fa-edit"></i></span></button>'
+                            res += '<button class="btn btn-danger mr-2 btnDeleteCategorie"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
                         })
 
                         $('#showCategorie').empty()
@@ -189,6 +200,34 @@
                     }
                 });
             };
+
+
+            let ajaxConfiguration = function(newConfig) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+
+                let url = '{{ url('api/configuration')}}';
+
+                $.ajax({
+                    url: url,
+                    method: 'post',
+                    data: {
+                        categorie: "Catégorie",
+                        champ: "Nom",
+                        libelle: newConfig
+                    },
+                    datatype: 'json',
+                    success: function (data) {
+                        console.log(data)
+                    },
+                    error: function (data) {
+                        console.log("fail");
+                    }
+                });
+            }
 
 
             $(document).ready(function(){
@@ -203,9 +242,105 @@
                     categories()
                 })
 
+
             });
 
 
+
+            let ajaxCategorie = function(newConfig) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+
+                let url = "{{ url('/addCategorie/:categorie')}}";
+                url = url.replace(':categorie', newConfig);
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function (data) {
+                        $('#showCategorie').append('<form class="form-inline"><input type="text" class="form-control mr-2" value="'+ data.data.nom.libelle +'"><button class="btn btn-primary mr-2"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger mr-2"><span class="icon"><i class="fa fa-times"></i></span></button></form>')
+                    },
+                    error: function (data) {
+                        console.log("fail");
+                    }
+                });
+            }
+
+
+
+            $('#formAddCategorie').submit(function(e){
+
+                e.preventDefault();
+                if($("#newCategorie").val().trim() === "") return false;
+                ajaxCategorie($("#newCategorie").val().trim())
+                $("#newCategorie").val("")
+
+            })
+
+            let ajaxDeleteCategorie = function(newConfig) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+
+                let url = "{{ url('/deleteCategorie/:categorie')}}";
+                url = url.replace(':categorie', newConfig);
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function (data) {
+                        console.log("success")
+                        console.log(data)
+                    },
+                    error: function (data) {
+                        console.log("fail");
+                    }
+                });
+            }
+
+            $('#showCategorie').on('click', '.btnDeleteCategorie', function (e) {
+                e.preventDefault();
+                ajaxDeleteCategorie($(this).siblings('input').val())
+                $(this).parent().remove()
+
+            })
+
+
+            let ajaxEditCategorie = function(idConfig, newConfig) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+
+                let url = "{{ url('/editCategorie/:id/:categorie')}}";
+                url = url.replace(':id', idConfig);
+                url = url.replace(':categorie', newConfig);
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function (data) {
+                        console.log("success")
+                        console.log(data)
+                    },
+                    error: function (data) {
+                        console.log("fail");
+                    }
+                });
+            }
+
+            $('#showCategorie').on('click', '.btnEditCategorie', function (e) {
+                e.preventDefault();
+                ajaxEditCategorie($(this).siblings('input').attr('data-id'), $(this).siblings('input').val())
+                //$(this).parent().remove()
+
+            })
 
 
         </script>
