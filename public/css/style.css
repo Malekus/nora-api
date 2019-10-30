@@ -271,3 +271,12 @@ main {
     padding: 5px 5px;
     background-color: #2a9055;
 }
+
+#configCategorie input {
+    margin-bottom: 10px;
+}
+
+#configCategorie button {
+    width: 45px;
+    margin-bottom: 10px;
+}

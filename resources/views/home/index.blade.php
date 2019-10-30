@@ -84,9 +84,33 @@
                     <div id="contentConfig">
                         <div id="configCategorie">
                             <h3>Catégorie</h3>
+                            <div id="showCategorie">
+
+                            </div>
+
+
+                            <div id="addCategorie" class="my-3">
+                                <form class="form-inline">
+                                    <input type="text" class="form-control mr-2" placeholder="Ajouter une catégorie">
+                                    <button class="btn btn-success mr-2">
+                                        <span class="icon"><i class="fa fa-plus"></i></span>
+                                    </button>
+                                </form>
+                            </div>
+
                         </div>
                         <div id="configPhrase">
                             <h3>Phrase</h3>
+                            <form class="form-inline">
+                                <input type="text" class="form-control mr-2">
+                                <input type="text" class="form-control mr-2">
+                                <button class="btn btn-primary mr-2">
+                                    <span class="icon"><i class="fa fa-edit"></i></span>
+                                </button>
+                                <button class="btn btn-danger mr-2">
+                                    <span class="icon"><i class="fa fa-times"></i></span>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -132,14 +156,58 @@
 
             ajaxPhrase()
 
+            let categories = function(){
+
+                $('#showCategorie').empty()
+                $('#showCategorie').append(loader);
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+
+                let url = '{{ url('api/categories')}}';
+                let res = '';
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function (data) {
+                        $(data.data).each(function(index, element){
+                            res += '<form class="form-inline"><input type="text" class="form-control mr-2" value="'+ element.nom.libelle +'">'
+                            res += '<button class="btn btn-primary mr-2"><span class="icon"><i class="fa fa-edit"></i></span></button>'
+                            res += '<button class="btn btn-danger mr-2"><span class="icon"><i class="fa fa-times"></i></span></button></form>'
+                        })
+
+                        $('#showCategorie').empty()
+                        $('#showCategorie').append(res)
+
+                    },
+                    error: function (data) {
+                        console.log("fail");
+                    }
+                });
+            };
+
 
             $(document).ready(function(){
                 $('#idSelectCategorie').change(function(e){
                     e.preventDefault();
-
                     ajaxPhrase();
                 });
+
+
+                $('#navWorking').on('click', '#btnConfig', function(e){
+                    e.preventDefault();
+                    categories()
+                })
+
             });
+
+
+
+
         </script>
 @endsection
 
