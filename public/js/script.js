@@ -1,14 +1,15 @@
 $(document).ready(function(){
-
+/*
     $('#btnConfig').click(function(e){
         console.log("Configuration")
         e.preventDefault();
-        var balise = '<div class="modal fade modalConfig" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-xl"><div class="modal-content"><div class="modal-header"><h2 class="modal-title">Configurations</h2></div><div class="modal-body"><p class="text-justify">'
-
+        var balise = '<div class="modal fade modalConfig" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-xl"><div class="modal-content"><div class="modal-header"><h2 class="modal-title">Configurations</h2></div><div class="modal-body"><p class="text-justify">dedede'
         balise += '</p></div></div></div></div>'
         $(".no-height").empty()
         $(".no-height").append(balise)
-    })
+    });
+
+    */
 
 
     $('#parts').on('click', '.addPhrase', function(e){
@@ -19,11 +20,19 @@ $(document).ready(function(){
     /*Nav Working*/
     $('#btnShowAll').click(function(){
         var balise = '<div class="modal fade modalShowAll" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><h2 class="modal-title">Résultat du copier</h2></div><div class="modal-body"><p class="text-justify">'
-        balise += $("#displayWorking .phrase").find('p').text()
-        balise += '</p></div></div></div></div>'
-        $(".no-height").empty()
-        $(".no-height").append(balise)
-    })
+        let texte = "";
+        $("#displayWorking .phrase").find('p').each(function(index, element){
+            console.log($("#displayWorking .phrase").find('p').length)
+            texte += $(element).text();
+            if(index != ($("#displayWorking .phrase").find('p').length) - 1){
+                texte += " ";
+            }
+        });
+        balise += texte;
+        balise += '</p></div></div></div></div>';
+        $(".no-height").empty();
+        $(".no-height").append(balise);
+    });
 
     $('#btnBack').click(function(){
         console.log($("#displayWorking .phrase").last().remove())
@@ -53,7 +62,35 @@ $(document).ready(function(){
 
     $('#displayWorking').on('click', '.btnRemovePhrase', function(e){
         $(this).closest(".phrase").remove()
-    })
+    });
 
     /*end Nav Working Phrase*/
+
+
+    $('.btnPlace').on('click', '.btnCopie', function(e){
+        let texte = "";
+        $("#displayWorking .phrase").find('p').each(function(index, element){
+            console.log($("#displayWorking .phrase").find('p').length)
+            texte += $(element).text();
+            if(index != ($("#displayWorking .phrase").find('p').length) - 1){
+                texte += " ";
+            }
+        });
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val(texte).select();
+        document.execCommand("copy");
+        $temp.remove();
+    });
+
 });
+
+/*
+function copyToClipboard(element) {
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val($(element).text()).select();
+  document.execCommand("copy");
+  $temp.remove();
+}
+* */

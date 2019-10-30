@@ -27,6 +27,14 @@
     </nav>
 </header>
 <main>
+
+
+    <div id="badgeAlert" style="position: absolute; width: 100%" class="text-center d-none">
+        <div class="alert alert-primary" role="alert" style="width: auto; margin: 0 auto">
+            On est la
+        </div>
+    </div>
+
     <div id="container">
         @yield('content')
     </div>

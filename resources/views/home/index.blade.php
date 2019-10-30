@@ -60,14 +60,44 @@
                         <button class="btn btn-danger" id="btnClearAll">
                             <span class="icon"><i class="fa fa-times"></i></span>
                         </button>
+
+                        <button class="btn btn-info" id="btnConfig" data-toggle="modal" data-target=".modalConfig">
+                            <span class="icon"><i class="fa fa-cogs"></i></span>
+                        </button>
                     </div>
                 </div>
                 <div class="btnPlace">
-                    <button class="btn btn-primary">Copier</button>
+                    <button class="btn btn-primary btnCopie">Copier</button>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade modalConfig" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Configurations</h2>
+                </div>
+                <div class="modal-body">
+                    <div id="contentConfig">
+                        <div id="configCategorie">
+                            <h3>Catégorie</h3>
+                        </div>
+                        <div id="configPhrase">
+                            <h3>Phrase</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('ajax')
