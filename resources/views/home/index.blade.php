@@ -101,7 +101,8 @@
                                                 <option value="{{ $categorie->nom->id }}"
                                                         selected>{{ $categorie->nom->libelle  }}</option>
                                             @else
-                                                <option value="{{ $categorie->nom->id }}">{{ $categorie->nom->libelle  }}</option>
+                                                <option
+                                                    value="{{ $categorie->nom->id }}">{{ $categorie->nom->libelle  }}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -119,7 +120,8 @@
                                 <div class="form-inline" id="formAddPhrase">
                                     <select class="form-control">
                                         @foreach($categories as $categorie)
-                                            <option value="{{ $categorie->nom->id }}">{{ $categorie->nom->libelle  }}</option>
+                                            <option
+                                                value="{{ $categorie->nom->id }}">{{ $categorie->nom->libelle  }}</option>
                                         @endforeach
                                     </select>
                                     <input type="text" class="form-control mr-2" placeholder="Ajouter une phrase">
@@ -226,36 +228,21 @@
                 url: url,
                 method: 'GET',
                 success: function (data) {
-
-                    console.log()
                     let htmlCategorie = '<select class="form-control">'
                     $(data[0]).each(function (index, element) {
-                        htmlCategorie += '<option value="' + element.id + '">' + element.libelle + '</option>'
+                        htmlCategorie += '<option value="' + element.id + '">' + element.nom.libelle + '</option>'
                     })
                     htmlCategorie += "</select>"
 
-
-
-                    let templateAdd = '<div class="form-inline"><input type="text" class="form-control" value="XXX"><button class="btn btn-primary"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
-
-                    console.log(data[1])
-
-                    /*
-                     $(data.data).each(function(index, element){
-                     res += '<div class="form-inline"><input type="text" data-id="'+ element.nom.id +'" class="form-control" value="'+ element.nom.libelle +'">'
-                     res += '<button class="btn btn-primary btnEditPhrase"><span class="icon"><i class="fa fa-edit"></i></span></button>'
-                     res += '<button class="btn btn-danger btnDeletePhrase"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
-
-
-
-
-                     })
-
-                     */
-
+                    $(data[1]).each(function (index, element) {
+                        let templateAdd = '<div class="form-inline">' + htmlCategorie + '<input type="text" class="form-control" value=":XXX"><button class="btn btn-primary"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
+                        templateAdd = templateAdd.replace('value="'+element.categorie.nom.id+'"', 'value="'+element.categorie.nom.id+'" selected')
+                        res += templateAdd.replace(':XXX', element.texte);
+                    })
 
                     $('#showPhrase').empty()
                     $('#showPhrase').append(res)
+
 
                 },
                 error: function (data) {

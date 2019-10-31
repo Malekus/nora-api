@@ -276,11 +276,11 @@ main {
     flex: 2 0;
 }
 
-#configCategorie input {
+#configCategorie input, #configPhrase input, #configPhrase select {
     margin-bottom: 10px;
 }
 
-#configCategorie button {
+#configCategorie button, #configPhrase button {
     width: 45px;
     margin-bottom: 10px;
 }
