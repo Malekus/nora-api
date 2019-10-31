@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Phrase;
+use App\Categorie;
 use App\Http\Requests\StorePhraseRequest;
 use App\Http\Resources\Phrase as PhraseResource;
+use App\Http\Resources\Categorie as CategorieResource;
 
 class PhraseController extends Controller
 {
     public function index()
     {
         $models = Phrase::paginate(15);
-        return PhraseResource::collection($models);
+        $categories = Categorie::all();
+        return array(CategorieResource::collection($categories), PhraseResource::collection($models));
     }
 
     public function show($id)

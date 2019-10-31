@@ -28,10 +28,6 @@
                     <div id="displayWorking">
 
 
-
-
-
-
                         <!--
 
                                                 <div class="phrase rounded-lg">
@@ -87,7 +83,8 @@
                             <div id="showCategorie"></div>
                             <div id="addCategorie" class="my-3">
                                 <div class="form-inline" id="formAddCategorie">
-                                    <input type="text" class="form-control mr-2" id="newCategorie" placeholder="Ajouter une catégorie">
+                                    <input type="text" class="form-control mr-2" id="newCategorie"
+                                           placeholder="Ajouter une catégorie">
                                     <button class="btn btn-success mr-2">
                                         <span class="icon"><i class="fa fa-plus"></i></span>
                                     </button>
@@ -101,7 +98,8 @@
                                     <select class="form-control">
                                         @foreach($categories as $categorie)
                                             @if($categorie->nom->libelle == "Conclusion")
-                                                <option value="{{ $categorie->nom->id }}" selected>{{ $categorie->nom->libelle  }}</option>
+                                                <option value="{{ $categorie->nom->id }}"
+                                                        selected>{{ $categorie->nom->libelle  }}</option>
                                             @else
                                                 <option value="{{ $categorie->nom->id }}">{{ $categorie->nom->libelle  }}</option>
                                             @endif
@@ -144,260 +142,268 @@
 @endsection
 
 @section('ajax')
-        <script>
+    <script>
 
-            let loader = '<div class="loader"><div class="spinner-border"></div></div>'
-            let categorieConfig;
-            let ajaxPhrase = function(){
-                $('.elementCenter').empty()
-                $('.elementCenter').append(loader);
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                    }
-                });
+        let loader = '<div class="loader"><div class="spinner-border"></div></div>'
+        let categorieConfig;
+        let ajaxPhrase = function () {
+            $('.elementCenter').empty()
+            $('.elementCenter').append(loader);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
 
-                let url = '{{ url('/phrase/:id')}}';
-                url = url.replace(':id', $('#idSelectCategorie').val());
+            let url = '{{ url('/phrase/:id')}}';
+            url = url.replace(':id', $('#idSelectCategorie').val());
 
-                $.ajax({
-                    url: url,
-                    method: 'GET',
-                    success: function (data) {
-                        $('.elementCenter').empty();
-                        $('.elementCenter').append(data);
-                        categorieConfig = data
-                    },
-                    error: function (data) {
-                        console.log("fail");
-                    }
-                });
-            };
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function (data) {
+                    $('.elementCenter').empty();
+                    $('.elementCenter').append(data);
+                    categorieConfig = data
+                },
+                error: function (data) {
+                    console.log("fail");
+                }
+            });
+        };
 
-            ajaxPhrase()
+        ajaxPhrase()
 
-            let categories = function(){
+        let categories = function () {
 
-                $('#showCategorie').empty()
-                $('#showCategorie').append(loader);
+            $('#showCategorie').empty()
+            $('#showCategorie').append(loader);
 
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                    }
-                });
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
 
-                let url = '{{ url('api/categories')}}';
-                let res = '';
+            let url = '{{ url('api/categories')}}';
+            let res = '';
 
-                $.ajax({
-                    url: url,
-                    method: 'GET',
-                    success: function (data) {
-                        $(data.data).each(function(index, element){
-                            res += '<div class="form-inline"><input type="text" data-id="'+ element.nom.id +'" class="form-control" value="'+ element.nom.libelle +'">'
-                            res += '<button class="btn btn-primary btnEditCategorie"><span class="icon"><i class="fa fa-edit"></i></span></button>'
-                            res += '<button class="btn btn-danger btnDeleteCategorie"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
-                        })
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function (data) {
+                    $(data.data).each(function (index, element) {
+                        res += '<div class="form-inline"><input type="text" data-id="' + element.nom.id + '" class="form-control" value="' + element.nom.libelle + '">'
+                        res += '<button class="btn btn-primary btnEditCategorie"><span class="icon"><i class="fa fa-edit"></i></span></button>'
+                        res += '<button class="btn btn-danger btnDeleteCategorie"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
+                    })
 
-                        $('#showCategorie').empty()
-                        $('#showCategorie').append(res)
+                    $('#showCategorie').empty()
+                    $('#showCategorie').append(res)
+                    categorieConfig = res
+                },
+                error: function (data) {
+                    console.log("fail");
+                }
+            });
+        };
 
-                    },
-                    error: function (data) {
-                        console.log("fail");
-                    }
-                });
-            };
+        let phrases = function () {
 
-            let phrases = function(){
+            $('#showPhrase').empty()
+            $('#showPhrase').append(loader);
 
-                $('#showPhrase').empty()
-                $('#showPhrase').append(loader);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
 
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                    }
-                });
+            let url = '{{ url('api/phrases')}}';
+            let res = '';
 
-                let url = '{{ url('api/phrases')}}';
-                let res = '';
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function (data) {
 
-                $.ajax({
-                    url: url,
-                    method: 'GET',
-                    success: function (data) {
-
-                        console.log(data)
-
-                        /*
-                        $(data.data).each(function(index, element){
-                            res += '<div class="form-inline"><input type="text" data-id="'+ element.nom.id +'" class="form-control" value="'+ element.nom.libelle +'">'
-                            res += '<button class="btn btn-primary btnEditPhrase"><span class="icon"><i class="fa fa-edit"></i></span></button>'
-                            res += '<button class="btn btn-danger btnDeletePhrase"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
-
+                    console.log()
+                    let htmlCategorie = '<select class="form-control">'
+                    $(data[0]).each(function (index, element) {
+                        htmlCategorie += '<option value="' + element.id + '">' + element.libelle + '</option>'
+                    })
+                    htmlCategorie += "</select>"
 
 
 
-                        })
+                    let templateAdd = '<div class="form-inline"><input type="text" class="form-control" value="XXX"><button class="btn btn-primary"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
 
-                        */
+                    console.log(data[1])
 
-                        
-
-                        $('#showPhrase').empty()
-                        $('#showPhrase').append(res)
-
-                    },
-                    error: function (data) {
-                        console.log("fail");
-                    }
-                });
-            };
-
-            let ajaxConfiguration = function(newConfig) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                    }
-                });
-
-                let url = '{{ url('api/configuration')}}';
-
-                $.ajax({
-                    url: url,
-                    method: 'post',
-                    data: {
-                        categorie: "Catégorie",
-                        champ: "Nom",
-                        libelle: newConfig
-                    },
-                    datatype: 'json',
-                    success: function (data) {
-                        console.log(data)
-                    },
-                    error: function (data) {
-                        console.log("fail");
-                    }
-                });
-            }
+                    /*
+                     $(data.data).each(function(index, element){
+                     res += '<div class="form-inline"><input type="text" data-id="'+ element.nom.id +'" class="form-control" value="'+ element.nom.libelle +'">'
+                     res += '<button class="btn btn-primary btnEditPhrase"><span class="icon"><i class="fa fa-edit"></i></span></button>'
+                     res += '<button class="btn btn-danger btnDeletePhrase"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
 
 
-            $(document).ready(function(){
-                $('#idSelectCategorie').change(function(e){
-                    e.preventDefault();
-                    ajaxPhrase();
-                });
 
 
-                $('#navWorking').on('click', '#btnConfig', function(e){
-                    e.preventDefault();
-                    categories();
-                    phrases();
-                })
+                     })
+
+                     */
 
 
+                    $('#showPhrase').empty()
+                    $('#showPhrase').append(res)
+
+                },
+                error: function (data) {
+                    console.log("fail");
+                }
+            });
+        };
+
+        let ajaxConfiguration = function (newConfig) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            let url = '{{ url('api/configuration')}}';
+
+            $.ajax({
+                url: url,
+                method: 'post',
+                data: {
+                    categorie: "Catégorie",
+                    champ: "Nom",
+                    libelle: newConfig
+                },
+                datatype: 'json',
+                success: function (data) {
+                    console.log(data)
+                },
+                error: function (data) {
+                    console.log("fail");
+                }
+            });
+        }
+
+
+        $(document).ready(function () {
+            $('#idSelectCategorie').change(function (e) {
+                e.preventDefault();
+                ajaxPhrase();
             });
 
 
-
-            let ajaxCategorie = function(newConfig) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                    }
-                });
-
-                let url = "{{ url('/addCategorie/:categorie')}}";
-                url = url.replace(':categorie', newConfig);
-
-                $.ajax({
-                    url: url,
-                    method: 'GET',
-                    success: function (data) {
-                        $('#showCategorie').append('<form class="form-inline"><input type="text" class="form-control mr-2" value="'+ data.data.nom.libelle +'"><button class="btn btn-primary mr-2"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger mr-2"><span class="icon"><i class="fa fa-times"></i></span></button></form>')
-                    },
-                    error: function (data) {
-                        console.log("fail");
-                    }
-                });
-            }
-
-
-
-            $('#formAddCategorie').submit(function(e){
-
+            $('#navWorking').on('click', '#btnConfig', function (e) {
                 e.preventDefault();
-                if($("#newCategorie").val().trim() === "") return false;
-                ajaxCategorie($("#newCategorie").val().trim())
-                $("#newCategorie").val("")
-
-            })
-
-            let ajaxDeleteCategorie = function(newConfig) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                    }
-                });
-
-                let url = "{{ url('/deleteCategorie/:categorie')}}";
-                url = url.replace(':categorie', newConfig);
-
-                $.ajax({
-                    url: url,
-                    method: 'GET',
-                    success: function (data) {
-                        console.log("success")
-                        console.log(data)
-                    },
-                    error: function (data) {
-                        console.log("fail");
-                    }
-                });
-            }
-
-            $('#showCategorie').on('click', '.btnDeleteCategorie', function (e) {
-                e.preventDefault();
-                ajaxDeleteCategorie($(this).siblings('input').val())
-                $(this).parent().remove()
-
+                categories();
+                phrases();
             })
 
 
-            let ajaxEditCategorie = function(idConfig, newConfig) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                    }
-                });
-
-                let url = "{{ url('/editCategorie/:id/:categorie')}}";
-                url = url.replace(':id', idConfig);
-                url = url.replace(':categorie', newConfig);
-
-                $.ajax({
-                    url: url,
-                    method: 'GET',
-                    success: function (data) {
-                        console.log("success")
-                        console.log(data)
-                    },
-                    error: function (data) {
-                        console.log("fail");
-                    }
-                });
-            }
-
-            $('#showCategorie').on('click', '.btnEditCategorie', function (e) {
-                e.preventDefault();
-                ajaxEditCategorie($(this).siblings('input').attr('data-id'), $(this).siblings('input').val())
-                //$(this).parent().remove()
-
-            })
+        });
 
 
-        </script>
+        let ajaxCategorie = function (newConfig) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            let url = "{{ url('/addCategorie/:categorie')}}";
+            url = url.replace(':categorie', newConfig);
+
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function (data) {
+                    $('#showCategorie').append('<form class="form-inline"><input type="text" class="form-control mr-2" value="' + data.data.nom.libelle + '"><button class="btn btn-primary mr-2"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger mr-2"><span class="icon"><i class="fa fa-times"></i></span></button></form>')
+                },
+                error: function (data) {
+                    console.log("fail");
+                }
+            });
+        }
+
+
+        $('#formAddCategorie').submit(function (e) {
+
+            e.preventDefault();
+            if ($("#newCategorie").val().trim() === "") return false;
+            ajaxCategorie($("#newCategorie").val().trim())
+            $("#newCategorie").val("")
+
+        })
+
+        let ajaxDeleteCategorie = function (newConfig) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            let url = "{{ url('/deleteCategorie/:categorie')}}";
+            url = url.replace(':categorie', newConfig);
+
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function (data) {
+                    console.log("success")
+                    console.log(data)
+                },
+                error: function (data) {
+                    console.log("fail");
+                }
+            });
+        }
+
+        $('#showCategorie').on('click', '.btnDeleteCategorie', function (e) {
+            e.preventDefault();
+            ajaxDeleteCategorie($(this).siblings('input').val())
+            $(this).parent().remove()
+
+        })
+
+
+        let ajaxEditCategorie = function (idConfig, newConfig) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            let url = "{{ url('/editCategorie/:id/:categorie')}}";
+            url = url.replace(':id', idConfig);
+            url = url.replace(':categorie', newConfig);
+
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function (data) {
+                    console.log("success")
+                    console.log(data)
+                },
+                error: function (data) {
+                    console.log("fail");
+                }
+            });
+        }
+
+        $('#showCategorie').on('click', '.btnEditCategorie', function (e) {
+            e.preventDefault();
+            ajaxEditCategorie($(this).siblings('input').attr('data-id'), $(this).siblings('input').val())
+            //$(this).parent().remove()
+
+        })
+
+
+    </script>
 @endsection
 
