@@ -82,34 +82,43 @@
                 </div>
                 <div class="modal-body">
                     <div id="contentConfig">
-                        <div id="configCategorie">
+                        <div id="configCategorie" class="rounded-lg">
                             <h3>Catégorie</h3>
-                            <div id="showCategorie" style="overflow-y: scroll; height: 450px;"></div>
+                            <div id="showCategorie"></div>
                             <div id="addCategorie" class="my-3">
-                                <form class="form-inline" id="formAddCategorie">
+                                <div class="form-inline" id="formAddCategorie">
                                     <input type="text" class="form-control mr-2" id="newCategorie" placeholder="Ajouter une catégorie">
                                     <button class="btn btn-success mr-2">
                                         <span class="icon"><i class="fa fa-plus"></i></span>
                                     </button>
-                                </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="configPhrase" class="rounded-lg">
+                            <h3>Phrase</h3>
+                            <div id="showPhrase">
+                                <div class="form-inline">
+                                    <select class="form-control">
+                                        @foreach($categories as $categorie)
+                                            @if($categorie->nom->libelle == "Conclusion")
+                                                <option value="{{ $categorie->nom->id }}" selected>{{ $categorie->nom->libelle  }}</option>
+                                            @else
+                                                <option value="{{ $categorie->nom->id }}">{{ $categorie->nom->libelle  }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    <input type="text" class="form-control" value="on est la cest un test">
+                                    <button class="btn btn-primary">
+                                        <span class="icon"><i class="fa fa-edit"></i></span>
+                                    </button>
+                                    <button class="btn btn-danger">
+                                        <span class="icon"><i class="fa fa-times"></i></span>
+                                    </button>
+                                </div>
                             </div>
 
-                        </div>
-                        <div id="configPhrase">
-                            <h3>Phrase</h3>
-                            <form class="form-inline">
-                                <input type="text" class="form-control mr-2">
-                                <input type="text" class="form-control mr-2">
-                                <button class="btn btn-primary mr-2">
-                                    <span class="icon"><i class="fa fa-edit"></i></span>
-                                </button>
-                                <button class="btn btn-danger mr-2">
-                                    <span class="icon"><i class="fa fa-times"></i></span>
-                                </button>
-                            </form>
-
                             <div id="addPhrase" class="my-3">
-                                <form class="form-inline" id="formAddPhrase">
+                                <div class="form-inline" id="formAddPhrase">
                                     <select class="form-control">
                                         @foreach($categories as $categorie)
                                             <option value="{{ $categorie->nom->id }}">{{ $categorie->nom->libelle  }}</option>
@@ -119,7 +128,7 @@
                                     <button class="btn btn-success mr-2">
                                         <span class="icon"><i class="fa fa-plus"></i></span>
                                     </button>
-                                </form>
+                                </div>
                             </div>
 
                         </div>
@@ -127,7 +136,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
-                    <button type="button" class="btn btn-primary">Enregistrer</button>
                 </div>
             </div>
         </div>
@@ -139,7 +147,7 @@
         <script>
 
             let loader = '<div class="loader"><div class="spinner-border"></div></div>'
-
+            let categorieConfig;
             let ajaxPhrase = function(){
                 $('.elementCenter').empty()
                 $('.elementCenter').append(loader);
@@ -158,6 +166,7 @@
                     success: function (data) {
                         $('.elementCenter').empty();
                         $('.elementCenter').append(data);
+                        categorieConfig = data
                     },
                     error: function (data) {
                         console.log("fail");
@@ -186,9 +195,9 @@
                     method: 'GET',
                     success: function (data) {
                         $(data.data).each(function(index, element){
-                            res += '<div class="form-inline"><input type="text" data-id="'+ element.nom.id +'" class="form-control mr-2" value="'+ element.nom.libelle +'">'
-                            res += '<button class="btn btn-primary mr-2 btnEditCategorie"><span class="icon"><i class="fa fa-edit"></i></span></button>'
-                            res += '<button class="btn btn-danger mr-2 btnDeleteCategorie"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
+                            res += '<div class="form-inline"><input type="text" data-id="'+ element.nom.id +'" class="form-control" value="'+ element.nom.libelle +'">'
+                            res += '<button class="btn btn-primary btnEditCategorie"><span class="icon"><i class="fa fa-edit"></i></span></button>'
+                            res += '<button class="btn btn-danger btnDeleteCategorie"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
                         })
 
                         $('#showCategorie').empty()
@@ -201,6 +210,51 @@
                 });
             };
 
+            let phrases = function(){
+
+                $('#showPhrase').empty()
+                $('#showPhrase').append(loader);
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+
+                let url = '{{ url('api/phrases')}}';
+                let res = '';
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function (data) {
+
+                        console.log(data)
+
+                        /*
+                        $(data.data).each(function(index, element){
+                            res += '<div class="form-inline"><input type="text" data-id="'+ element.nom.id +'" class="form-control" value="'+ element.nom.libelle +'">'
+                            res += '<button class="btn btn-primary btnEditPhrase"><span class="icon"><i class="fa fa-edit"></i></span></button>'
+                            res += '<button class="btn btn-danger btnDeletePhrase"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
+
+
+
+
+                        })
+
+                        */
+
+                        
+
+                        $('#showPhrase').empty()
+                        $('#showPhrase').append(res)
+
+                    },
+                    error: function (data) {
+                        console.log("fail");
+                    }
+                });
+            };
 
             let ajaxConfiguration = function(newConfig) {
                 $.ajaxSetup({
@@ -239,7 +293,8 @@
 
                 $('#navWorking').on('click', '#btnConfig', function(e){
                     e.preventDefault();
-                    categories()
+                    categories();
+                    phrases();
                 })
 
 

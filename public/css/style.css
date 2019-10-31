@@ -256,20 +256,24 @@ main {
 }
 
 #contentConfig {
-    background-color: #2c3e50;
-    color: white;
     display: flex;
 }
 
-#configCategorie {
+#configCategorie, #configPhrase {
     flex: 1 0;
     padding: 5px 5px;
+    margin: 5px;
+    border: 1px solid var(--color-bluedauph);
+    background-color: var(--color-blueasy);
+}
+
+
+#configCategorie h3{
+    color: #2c3e50;
 }
 
 #configPhrase {
     flex: 2 0;
-    padding: 5px 5px;
-    background-color: #2a9055;
 }
 
 #configCategorie input {
@@ -279,4 +283,31 @@ main {
 #configCategorie button {
     width: 45px;
     margin-bottom: 10px;
+}
+
+#showCategorie, #showPhrase {
+    overflow-y: scroll;
+    height: 450px;
+}
+
+#showCategorie::-webkit-scrollbar {
+    display: none;
+}
+
+#showPhrase::-webkit-scrollbar {
+    display: none;
+}
+
+#showCategorie div, #addCategorie div {
+    display: flex;
+    justify-content: space-evenly ;
+}
+
+#showPhrase div, #addPhrase div {
+    display: flex;
+    justify-content: space-evenly ;
+}
+
+#showPhrase input, #addPhrase input {
+    width: 60%;
 }
