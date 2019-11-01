@@ -297,6 +297,7 @@
 
 
         let ajaxCategorie = function (newConfig) {
+            console.log("Je suis dans ajax")
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -310,7 +311,7 @@
                 url: url,
                 method: 'GET',
                 success: function (data) {
-                    $('#showCategorie').append('<form class="form-inline"><input type="text" class="form-control mr-2" value="' + data.data.nom.libelle + '"><button class="btn btn-primary mr-2"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger mr-2"><span class="icon"><i class="fa fa-times"></i></span></button></form>')
+                    $('#showCategorie').append('<div class="form-inline"><input type="text" data-id="'+ data.data.nom.id +'" class="form-control" value="' + data.data.nom.libelle + '"><button class="btn btn-primary btnEditCategorie"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger btnDeleteCategorie"><span class="icon"><i class="fa fa-times"></i></span></button></div>')
                 },
                 error: function (data) {
                     console.log("fail");
@@ -319,7 +320,8 @@
         }
 
 
-        $('#formAddCategorie').submit(function (e) {
+        $('#formAddCategorie').on('click','.btn.btn-success', function (e) {
+            console.log("J'ai cliqué")
 
             e.preventDefault();
             if ($("#newCategorie").val().trim() === "") return false;
