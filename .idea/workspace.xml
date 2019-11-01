@@ -3,7 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="1ea3aaf2-0492-48a4-80b2-35408c8caa38" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PhraseController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PhraseController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/StorePhraseRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/StorePhraseRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Phrase.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Phrase.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_14_094202_create_phrases_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_14_094202_create_phrases_table.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/home/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/home/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -188,7 +194,7 @@
       <workItem from="1572427658788" duration="6557000" />
       <workItem from="1572494883580" duration="4619000" />
       <workItem from="1572540655099" duration="5287000" />
-      <workItem from="1572611478386" duration="2045000" />
+      <workItem from="1572611478386" duration="9081000" />
     </task>
     <servers />
   </component>
@@ -213,8 +219,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/resources/views/home/index.blade.php</url>
-          <line>322</line>
-          <option name="timeStamp" value="2" />
+          <line>396</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/resources/views/home/index.blade.php</url>
+          <line>458</line>
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -118,13 +118,13 @@
 
                             <div id="addPhrase" class="my-3">
                                 <div class="form-inline" id="formAddPhrase">
-                                    <select class="form-control">
+                                    <select class="form-control" id="newCategoriePhrase">
                                         @foreach($categories as $categorie)
                                             <option
                                                 value="{{ $categorie->nom->id }}">{{ $categorie->nom->libelle  }}</option>
                                         @endforeach
                                     </select>
-                                    <input type="text" class="form-control mr-2" placeholder="Ajouter une phrase">
+                                    <input type="text" class="form-control mr-2" id="newPhrase" placeholder="Ajouter une phrase">
                                     <button class="btn btn-success mr-2">
                                         <span class="icon"><i class="fa fa-plus"></i></span>
                                     </button>
@@ -235,13 +235,15 @@
                     htmlCategorie += "</select>"
 
                     $(data[1]).each(function (index, element) {
-                        let templateAdd = '<div class="form-inline">' + htmlCategorie + '<input type="text" class="form-control" value=":XXX"><button class="btn btn-primary"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
-                        templateAdd = templateAdd.replace('value="'+element.categorie.nom.id+'"', 'value="'+element.categorie.nom.id+'" selected')
+                        console.log(element)
+                        let templateAdd = '<div class="form-inline">' + htmlCategorie + '<input type="text" class="form-control" data-id="' + element.id + '" value=":XXX"><button class="btn btn-primary btnEditPhrase"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger btnDeletePhrase"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
+                        templateAdd = templateAdd.replace('value="' + element.categorie.nom.id + '"', 'value="' + element.categorie.nom.id + '" selected')
                         res += templateAdd.replace(':XXX', element.texte);
                     })
 
                     $('#showPhrase').empty()
                     $('#showPhrase').append(res)
+
 
 
                 },
@@ -311,7 +313,7 @@
                 url: url,
                 method: 'GET',
                 success: function (data) {
-                    $('#showCategorie').append('<div class="form-inline"><input type="text" data-id="'+ data.data.nom.id +'" class="form-control" value="' + data.data.nom.libelle + '"><button class="btn btn-primary btnEditCategorie"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger btnDeleteCategorie"><span class="icon"><i class="fa fa-times"></i></span></button></div>')
+                    $('#showCategorie').append('<div class="form-inline"><input type="text" data-id="' + data.data.nom.id + '" class="form-control" value="' + data.data.nom.libelle + '"><button class="btn btn-primary btnEditCategorie"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger btnDeleteCategorie"><span class="icon"><i class="fa fa-times"></i></span></button></div>')
                 },
                 error: function (data) {
                     console.log("fail");
@@ -319,8 +321,36 @@
             });
         }
 
+        let ajaxAddPhrase = function (categorie, phrase) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
 
-        $('#formAddCategorie').on('click','.btn.btn-success', function (e) {
+            let url = "{{ url('api/phrase')}}";
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: {
+                    categorie: categorie,
+                    texte: phrase
+                },
+                datatype: 'json',
+                success: function (data) {
+                    console.log(data)
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+
+
+
+
+        $('#formAddCategorie').on('click', '.btn.btn-success', function (e) {
             console.log("J'ai cliqué")
 
             e.preventDefault();
@@ -328,6 +358,17 @@
             ajaxCategorie($("#newCategorie").val().trim())
             $("#newCategorie").val("")
 
+        })
+
+        $('#formAddPhrase').on('click', '.btn.btn-success', function (e) {
+            console.log("J'ai cliqué")
+            e.preventDefault();
+            if ($("#newPhrase").val().trim() === "") return false;
+            ajaxAddPhrase($("#newCategoriePhrase").val(), $("#newPhrase").val().trim())
+            /*
+            ajaxAddPhrase($("#newCategorie").val().trim())
+            $("#newCategorie").val("")
+            */
         })
 
         let ajaxDeleteCategorie = function (newConfig) {
@@ -353,12 +394,28 @@
             });
         }
 
-        $('#showCategorie').on('click', '.btnDeleteCategorie', function (e) {
-            e.preventDefault();
-            ajaxDeleteCategorie($(this).siblings('input').val())
-            $(this).parent().remove()
+        let ajaxDeletePhrase = function (idPhrase) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
 
-        })
+            let url = "{{ url('/api/phrase/:idPhrase')}}";
+            url = url.replace(':idPhrase', idPhrase);
+
+            $.ajax({
+                url: url,
+                method: 'DELETE',
+                success: function (data) {
+                    console.log(data)
+                },
+                error: function (data) {
+                    console.log("fail");
+                }
+            });
+
+        }
 
 
         let ajaxEditCategorie = function (idConfig, newConfig) {
@@ -385,11 +442,25 @@
             });
         }
 
+
+        $('#showCategorie').on('click', '.btnDeleteCategorie', function (e) {
+            e.preventDefault();
+            ajaxDeleteCategorie($(this).siblings('input').val())
+            $(this).parent().remove()
+        })
+
         $('#showCategorie').on('click', '.btnEditCategorie', function (e) {
             e.preventDefault();
             ajaxEditCategorie($(this).siblings('input').attr('data-id'), $(this).siblings('input').val())
-            //$(this).parent().remove()
 
+        })
+
+
+        $('#showPhrase').on('click', '.btnDeletePhrase', function (e) {
+            e.preventDefault();
+            console.log()
+            ajaxDeletePhrase($(this).siblings('input').attr('data-id'))
+            $(this).parent().remove()
         })
 
 

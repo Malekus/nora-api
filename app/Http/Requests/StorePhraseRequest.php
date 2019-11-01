@@ -19,7 +19,7 @@ class StorePhraseRequest extends FormRequest
             'uniquePhrase',
             function () {
                 $counter = DB::table('phrases')
-                    ->where(['type_id' => $this->request->get('type'),
+                    ->where(['categorie_id' => $this->request->get('categorie'),
                         'texte' => $this->request->get('texte')])
                     ->count();
                 return 0 === $counter;
@@ -41,7 +41,7 @@ class StorePhraseRequest extends FormRequest
     public function rules()
     {
         return [
-            'type' => 'required|uniquePhrase',
+            'categorie' => 'required|uniquePhrase',
             'texte' => 'required'
         ];
     }
@@ -49,7 +49,7 @@ class StorePhraseRequest extends FormRequest
     public function messages()
     {
         return [
-            'nom.required' => 'Le champ nom est obligatoire.',
+            'categorie.required' => 'Le champ nom est obligatoire.',
             'texte.required' => 'Le champ texte est obligatoire.'
         ];
     }

@@ -54,4 +54,16 @@ class HomeController extends Controller
 
     }
 
+    public function deletePhrase(Request $request)
+    {
+        echo array($request->get('categorie'), $request->get('texte'));
+        return array($request->get('categorie'), $request->get('texte'));
+        $model = Phrase::where(['categorie_id' => $categorie, 'texte' => $phrase]);
+        if ($model->delete()) {
+            return "True";
+        }
+        return "False";
+
+    }
+
 }

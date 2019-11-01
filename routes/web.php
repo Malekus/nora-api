@@ -29,3 +29,6 @@ Route::get('/deleteCategorie/{categorie}', 'HomeController@deleteCategorie')
 
 Route::get('/editCategorie/{id}/{categorie}', 'HomeController@editCategorie')
     ->name('home.editCategorie');
+
+Route::post('deletePhrase', 'HomeController@deletePhrase')
+    ->name('home.deletePhrase');

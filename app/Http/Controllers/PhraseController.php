@@ -12,7 +12,7 @@ class PhraseController extends Controller
 {
     public function index()
     {
-        $models = Phrase::paginate(15);
+        $models = Phrase::all();
         $categories = Categorie::all();
         return array(CategorieResource::collection($categories), PhraseResource::collection($models));
     }
@@ -36,7 +36,7 @@ class PhraseController extends Controller
     public function store(StorePhraseRequest $request)
     {
         $model = $request->isMethod('put') ? Phrase::findOrFail($request->id) : new Phrase;
-        $model->type()->associate($request->get('type'));
+        $model->categorie()->associate($request->get('categorie'));
         $model->texte = $request->get('texte');
 
         if ($model->save()) {
