@@ -31,6 +31,7 @@ class HomeController extends Controller
             $newCategorie = Categorie::create(['nom_id' => $newConfig->id]);
             return new CategorieResource($newCategorie);
         }
+        return "False";
 
     }
 
@@ -46,7 +47,8 @@ class HomeController extends Controller
 
     public function editCategorie($id, $categorie)
     {
-        $config = Configuration::where(['id' => $id])->update(['libelle' => $categorie]);
+        $model = Categorie::where(['id' => $id])->first(); //->categorie()->update(['libelle' => $categorie]);
+        $config = Configuration::where('id', $model->nom->id)->update(['libelle' => $categorie]);
         if ($config == 1) {
             return "True";
         }

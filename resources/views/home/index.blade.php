@@ -56,10 +56,6 @@
                         <button class="btn btn-danger" id="btnClearAll">
                             <span class="icon"><i class="fa fa-times"></i></span>
                         </button>
-
-                        <button class="btn btn-info" id="btnConfig" data-toggle="modal" data-target=".modalConfig">
-                            <span class="icon"><i class="fa fa-cogs"></i></span>
-                        </button>
                     </div>
                 </div>
                 <div class="btnPlace">
@@ -93,35 +89,13 @@
                         </div>
                         <div id="configPhrase" class="rounded-lg">
                             <h3>Phrase</h3>
-                            <div id="showPhrase">
-                                <div class="form-inline">
-                                    <select class="form-control">
-                                        @foreach($categories as $categorie)
-                                            @if($categorie->nom->libelle == "Conclusion")
-                                                <option value="{{ $categorie->nom->id }}"
-                                                        selected>{{ $categorie->nom->libelle  }}</option>
-                                            @else
-                                                <option
-                                                    value="{{ $categorie->nom->id }}">{{ $categorie->nom->libelle  }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                    <input type="text" class="form-control" value="on est la cest un test">
-                                    <button class="btn btn-primary">
-                                        <span class="icon"><i class="fa fa-edit"></i></span>
-                                    </button>
-                                    <button class="btn btn-danger">
-                                        <span class="icon"><i class="fa fa-times"></i></span>
-                                    </button>
-                                </div>
-                            </div>
-
+                            <div id="showPhrase"></div>
                             <div id="addPhrase" class="my-3">
                                 <div class="form-inline" id="formAddPhrase">
                                     <select class="form-control" id="newCategoriePhrase">
                                         @foreach($categories as $categorie)
                                             <option
-                                                value="{{ $categorie->nom->id }}">{{ $categorie->nom->libelle  }}</option>
+                                                value="{{ $categorie->id }}">{{ $categorie->nom->libelle  }}</option>
                                         @endforeach
                                     </select>
                                     <input type="text" class="form-control mr-2" id="newPhrase" placeholder="Ajouter une phrase">
@@ -195,7 +169,7 @@
                 method: 'GET',
                 success: function (data) {
                     $(data.data).each(function (index, element) {
-                        res += '<div class="form-inline"><input type="text" data-id="' + element.nom.id + '" class="form-control" value="' + element.nom.libelle + '">'
+                        res += '<div class="form-inline"><input type="text" data-id="' + element.id + '" class="form-control" value="' + element.nom.libelle + '">'
                         res += '<button class="btn btn-primary btnEditCategorie"><span class="icon"><i class="fa fa-edit"></i></span></button>'
                         res += '<button class="btn btn-danger btnDeleteCategorie"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
                     })
@@ -237,7 +211,7 @@
                     $(data[1]).each(function (index, element) {
                         console.log(element)
                         let templateAdd = '<div class="form-inline">' + htmlCategorie + '<input type="text" class="form-control" data-id="' + element.id + '" value=":XXX"><button class="btn btn-primary btnEditPhrase"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger btnDeletePhrase"><span class="icon"><i class="fa fa-times"></i></span></button></div>'
-                        templateAdd = templateAdd.replace('value="' + element.categorie.nom.id + '"', 'value="' + element.categorie.nom.id + '" selected')
+                        templateAdd = templateAdd.replace('value="' + element.categorie.id + '"', 'value="' + element.categorie.nom.id + '" selected')
                         res += templateAdd.replace(':XXX', element.texte);
                     })
 
@@ -287,8 +261,7 @@
                 ajaxPhrase();
             });
 
-
-            $('#navWorking').on('click', '#btnConfig', function (e) {
+            $('#navbarRight').on('click', '#btnConfig', function (e) {
                 e.preventDefault();
                 categories();
                 phrases();
@@ -313,7 +286,7 @@
                 url: url,
                 method: 'GET',
                 success: function (data) {
-                    $('#showCategorie').append('<div class="form-inline"><input type="text" data-id="' + data.data.nom.id + '" class="form-control" value="' + data.data.nom.libelle + '"><button class="btn btn-primary btnEditCategorie"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger btnDeleteCategorie"><span class="icon"><i class="fa fa-times"></i></span></button></div>')
+                    $('#showCategorie').append('<div class="form-inline"><input type="text" data-id="' + data.data.id + '" class="form-control" value="' + data.data.nom.libelle + '"><button class="btn btn-primary btnEditCategorie"><span class="icon"><i class="fa fa-edit"></i></span></button><button class="btn btn-danger btnDeleteCategorie"><span class="icon"><i class="fa fa-times"></i></span></button></div>')
                 },
                 error: function (data) {
                     console.log("fail");
@@ -339,7 +312,9 @@
                 },
                 datatype: 'json',
                 success: function (data) {
+                    console.log("success")
                     console.log(data)
+                    phrases()
                 },
                 error: function (data) {
                     console.log(data);
@@ -365,10 +340,7 @@
             e.preventDefault();
             if ($("#newPhrase").val().trim() === "") return false;
             ajaxAddPhrase($("#newCategoriePhrase").val(), $("#newPhrase").val().trim())
-            /*
-            ajaxAddPhrase($("#newCategorie").val().trim())
-            $("#newCategorie").val("")
-            */
+
         })
 
         let ajaxDeleteCategorie = function (newConfig) {
@@ -462,6 +434,7 @@
             ajaxDeletePhrase($(this).siblings('input').attr('data-id'))
             $(this).parent().remove()
         })
+
 
 
     </script>

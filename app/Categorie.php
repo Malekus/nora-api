@@ -8,7 +8,7 @@ class Categorie extends Model
 {
     protected $table = 'categories';
 
-    protected $guarded = ['created_at', 'updated_at'];
+    protected $fillable = ['nom_id'];
 
     public function nom()
     {
